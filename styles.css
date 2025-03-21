@@ -1,0 +1,82 @@
+/* styles.css */
+.calendar {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    width: 300px;
+    direction: rtl;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.calendar-header button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: var(--primary-color, #ff9800);
+}
+
+.calendar-header button:hover {
+    color: var(--secondary-color, #ffcc80);
+}
+
+.weekdays {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.weekdays span {
+    flex: 1;
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+}
+
+.dates {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.dates span {
+    text-align: center;
+    padding: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.dates span:hover {
+    background-color: #e0e0e0;
+}
+
+.dates span.selected {
+    background-color: var(--primary-color, #ff9800);
+    color: #fff;
+}
+
+.dates span.in-range {
+    background-color: var(--secondary-color, #ffcc80);
+    color: #000;
+}
+
+#selected-dates {
+    margin-top: 16px;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* styles.css */
+.dates span:empty {
+    background-color: transparent;
+    cursor: default;
+}
