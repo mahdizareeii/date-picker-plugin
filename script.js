@@ -1,9 +1,9 @@
 const monthYearElement = document.getElementById('month-year');
+const weekdaysElement = document.getElementById('weekdays');
 const datesElement = document.getElementById('dates');
 const prevMonthButton = document.getElementById('prev-month');
 const nextMonthButton = document.getElementById('next-month');
 const selectedDatesElement = document.getElementById('selected-dates');
-const log_tag = "persian_date_picker : "
 
 // Persian month names
 const persianMonths = [
@@ -54,33 +54,39 @@ function isLeapYear(year) {
 }
 
 // Get the day of the week for a Jalali date
-function jalaliDayOfWeek(year, month, day) {
-    const gregorian = jalaliToGregorian(year, month, day);
+function jalaliDayOfWeek(year, month) {
+    const gregorian = jalaliToGregorian(year, month, 1);
     const date = new Date(gregorian.year, gregorian.month - 1, gregorian.day);
     const dayOfWeek = date.getDay(); // 0=Sunday, 1=Monday, ..., 6=Saturday
-
-    console.log(log_tag + "firstDayOfWeek date in gregori-> " + date)
-    console.log(log_tag + "firstDayOfWeek in gregori-> " + dayOfWeek)
     // Adjust for Jalali week (Saturday=0, Sunday=1, ..., Friday=6)
     return (dayOfWeek + 1) % 7;
 }
 
+function gregorianDayOfWeek(year, month) {
+    return new Date(year, month - 1, 1).getDay();
+}
+
 // Render the calendar
 function renderCalendar() {
+    document.querySelector('.calendar').setAttribute('dir', calendarType === 'jalali' ? 'rtl' : 'ltr');
+    document.querySelector('.calendar-header').setAttribute('dir', 'rtl');
     const { year, month, day } = getCurrentDate();
-    const daysInMonth = calendarType === 'jalali' ?
-        getJalaliMonthCount(year, month) :
-        getGregorianMonthCount();
+    const daysInMonth = calendarType === 'jalali' ? getJalaliMonthCount(year, month) : getGregorianMonthCount();
+    const firstDayOfWeek = calendarType === 'jalali' ? jalaliDayOfWeek(year, month) : gregorianDayOfWeek(year, month);
 
-    const firstDayOfWeek = calendarType === 'jalali' ?
-        jalaliDayOfWeek(year, month, 1) :
-        new Date(year, month - 1, 1).getDay() + 1;
-
-    console.log(log_tag + "firstDayOfWeek -> " + firstDayOfWeek)
     // Set the month and year
     monthYearElement.textContent = calendarType === 'jalali' ?
         `${persianMonths[month - 1]} ${year}` :
         `${gregorianMonths[month - 1]} ${year}`;
+
+    //init weeks
+    const weekdays = calendarType === 'jalali' ? ["ش", "ی", "د", "س", "چ", "پ", "ج"] : ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+    weekdaysElement.innerHTML = '';
+    weekdays.forEach(day => {
+        const span = document.createElement('span');
+        span.textContent = day;
+        weekdaysElement.appendChild(span);
+    });
 
     // Clear previous dates
     datesElement.innerHTML = '';
@@ -148,44 +154,36 @@ function updateSelectedDates() {
 
 // Handle month navigation
 prevMonthButton.addEventListener('click', () => {
-    console.log(log_tag + "prevMonthButton -> " + currentDate)
     if (calendarType === 'jalali') {
         const jalaliDate = getCurrentDate();
-        console.log(log_tag + "prevMonthButton jalali -> " + jalaliDate.year + "-" + jalaliDate.month + "-" + jalaliDate.day)
         jalaliDate.day = 1;
         jalaliDate.month -= 1;
         if (jalaliDate.month < 1) {
             jalaliDate.month = 12;
             jalaliDate.year -= 1;
         }
-        console.log(log_tag + "prevMonthButton reduced month -> " + jalaliDate.year + "-" + jalaliDate.month + "-" + jalaliDate.day)
         const gregorianDate = jalaliToGregorian(jalaliDate.year, jalaliDate.month, jalaliDate.day);
         currentDate = new Date(gregorianDate.year, gregorianDate.month - 1, gregorianDate.day);
     } else {
         currentDate.setMonth(currentDate.getMonth() - 1);
     }
-    console.log(log_tag + "prevMonthButton current date after changed -> " + currentDate)
     renderCalendar();
 });
 
 nextMonthButton.addEventListener('click', () => {
-    console.log(log_tag + "nextMonthButton -> " + currentDate)
     if (calendarType === 'jalali') {
         const jalaliDate = getCurrentDate();
-        console.log(log_tag + "nextMonthButton jalali -> " + jalaliDate.year + "-" + jalaliDate.month + "-" + jalaliDate.day)
         jalaliDate.day = 1;
         jalaliDate.month += 1;
         if (jalaliDate.month > 12) {
             jalaliDate.month = 1;
             jalaliDate.year += 1;
         }
-        console.log(log_tag + "nextMonthButton increased month -> " + jalaliDate.year + "-" + jalaliDate.month + "-" + jalaliDate.day)
         const gregorianDate = jalaliToGregorian(jalaliDate.year, jalaliDate.month, jalaliDate.day);
         currentDate = new Date(gregorianDate.year, gregorianDate.month - 1, gregorianDate.day);
     } else {
         currentDate.setMonth(currentDate.getMonth() + 1);
     }
-    console.log(log_tag + "nextMonthButton current date after changed -> " + currentDate)
 
     renderCalendar();
 });

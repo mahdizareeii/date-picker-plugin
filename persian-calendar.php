@@ -90,15 +90,7 @@ function persian_calendar_shortcode($atts) {
             <span id="month-year"></span>
             <button id="prev-month">&larr;</button>
         </div>
-        <div class="weekdays">
-            <span>ش</span>
-            <span>ی</span>
-            <span>د</span>
-            <span>س</span>
-            <span>چ</span>
-            <span>پ</span>
-            <span>ج</span>
-        </div>
+        <div class="weekdays" id="weekdays"></div>
         <div class="dates" id="dates"></div>
     </div>
     <?php
