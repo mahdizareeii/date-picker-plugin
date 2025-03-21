@@ -20,11 +20,11 @@
     border: none;
     font-size: 18px;
     cursor: pointer;
-    color: var(--primary-color, #ff9800);
+    color: var(--primary-color, #007bff);
 }
 
 .calendar-header button:hover {
-    color: var(--secondary-color, #ffcc80);
+    color: var(--secondary-color, #00264f);
 }
 
 .weekdays {
@@ -60,13 +60,13 @@
 }
 
 .dates span.selected {
-    background-color: var(--primary-color, #ff9800);
-    color: #fff;
+    background-color: var(--primary-color, #0030b5);
+    color: #ffffff;
 }
 
 .dates span.in-range {
-    background-color: var(--secondary-color, #ffcc80);
-    color: #000;
+    background-color: var(--secondary-color, #1d59ff);
+    color: #ffffff;
 }
 
 #selected-dates {

@@ -37,6 +37,15 @@ function getCurrentDate() {
     }
 }
 
+function getIndicedDate(year, month, day) {
+    if (calendarType === 'jalali') {
+        let gregorianDate = jalaliToGregorian(year, month, day);
+        return new Date(gregorianDate.year, gregorianDate.month - 1, gregorianDate.day);
+    } else {
+        return new Date(year, month - 1, day);
+    }
+}
+
 // Get the number of days in a Persian month
 function getJalaliMonthCount(year, month) {
     if (month <= 6) return 31;
@@ -70,6 +79,7 @@ function gregorianDayOfWeek(year, month) {
 function renderCalendar() {
     document.querySelector('.calendar').setAttribute('dir', calendarType === 'jalali' ? 'rtl' : 'ltr');
     document.querySelector('.calendar-header').setAttribute('dir', 'rtl');
+
     const { year, month, day } = getCurrentDate();
     const daysInMonth = calendarType === 'jalali' ? getJalaliMonthCount(year, month) : getGregorianMonthCount();
     const firstDayOfWeek = calendarType === 'jalali' ? jalaliDayOfWeek(year, month) : gregorianDayOfWeek(year, month);
@@ -99,38 +109,42 @@ function renderCalendar() {
 
     // Add dates
     for (let day = 1; day <= daysInMonth; day++) {
+        let indicedDate = getIndicedDate(year, month, day);
+
         const dateCell = document.createElement('span');
         dateCell.textContent = day;
-        dateCell.addEventListener('click', () => handleDateClick(day));
+        dateCell.addEventListener('click', () => handleDateClick(indicedDate));
         datesElement.appendChild(dateCell);
 
         // Highlight selected range
-        if (startDate !== null && endDate !== null && day >= startDate && day <= endDate) {
-            dateCell.classList.add('in-range');
-        }
-        if (day === startDate || day === endDate) {
+        if (isSameDate(indicedDate, startDate) || isSameDate(indicedDate, endDate)) {
+            console.log("highlight selected -> " + indicedDate.toISOString())
             dateCell.classList.add('selected');
+        }
+        if (startDate !== null && endDate !== null && indicedDate > startDate && indicedDate < endDate) {
+            console.log("highlight inrange -> " + indicedDate.toISOString())
+            dateCell.classList.add('in-range');
         }
     }
 }
 
 // Handle date click
-function handleDateClick(day) {
+function handleDateClick(date) {
     if (selectionType === 'range') {
         if (startDate === null || (startDate !== null && endDate !== null)) {
             // Start a new range
-            startDate = day;
+            startDate = date;
             endDate = null;
         } else {
             // End the range
-            endDate = day;
+            endDate = date;
             if (startDate > endDate) {
                 // Swap if start date is after end date
                 [startDate, endDate] = [endDate, startDate];
             }
         }
     } else if (selectionType === 'single') {
-        startDate = day;
+        startDate = date;
         endDate = null;
     }
 
@@ -192,6 +206,18 @@ nextMonthButton.addEventListener('click', () => {
 renderCalendar();
 
 
+
+
+function isSameDate(date1, date2) {
+    if (date1 == null && date2 == null) return true
+    if (date1 == null && date2 != null) return false
+    if (date1 != null && date2 == null) return false
+    return (
+        date1.getFullYear() === date2.getFullYear() &&
+        date1.getMonth() === date2.getMonth() &&
+        date1.getDate() === date2.getDate()
+    );
+}
 
 
 function gregorianToJalali(gy, gm, gd) {
