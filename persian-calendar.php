@@ -1,7 +1,21 @@
 <?php
 /*
 Plugin Name: Persian Calendar
-Description: A plugin to display a Persian (Jalali) or Gregorian calendar with range selection and customizable colors.
+Description: A plugin to display a Persian (Jalali) or Gregorian calendar 
+with range selection and customizable colors.
+
+
+How to show date picker:
+
+short code :
+[persian_calendar type="jalali" selection="range"]
+
+How to show selected days:
+
+html tag : <div id="selected-dates""></div>
+short code : [selected_dates]
+
+
 Version: 1.0
 Author: Your Name
 */
