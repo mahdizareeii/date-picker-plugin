@@ -12,7 +12,7 @@ short code :
 
 How to show selected days:
 
-html tag : <div id="selected-dates""></div>
+html tag : <div id="selected-dates"></div>
 short code : [selected_dates]
 
 

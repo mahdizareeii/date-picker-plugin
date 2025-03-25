@@ -54,7 +54,7 @@ function getJalaliMonthCount(year, month) {
 }
 
 function getGregorianMonthCount(year, month) {
-    return new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+    return new Date(year, month, 0).getDate();
 }
 
 // Check if a Persian year is a leap year
@@ -81,7 +81,7 @@ function renderCalendar() {
     document.querySelector('.calendar-header').setAttribute('dir', 'rtl');
 
     const { year, month, day } = getCurrentDate();
-    const daysInMonth = calendarType === 'jalali' ? getJalaliMonthCount(year, month) : getGregorianMonthCount();
+    const daysInMonth = calendarType === 'jalali' ? getJalaliMonthCount(year, month) : getGregorianMonthCount(year, month);
     const firstDayOfWeek = calendarType === 'jalali' ? jalaliDayOfWeek(year, month) : gregorianDayOfWeek(year, month);
 
     // Set the month and year
