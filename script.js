@@ -160,6 +160,12 @@ jQuery(document).ready(function ($) {
 
         updateSelectedDatesDisplay() {
             const display = $('#selected-dates');
+            const displayElement = document.getElementById('selected-dates');
+
+            if (!displayElement) {
+                console.warn('Display element not found');
+                return;
+            }
 
             if (!this.startDate) {
                 display.text(this.settings.i18n.noSelection || 'No dates selected.');
@@ -167,23 +173,23 @@ jQuery(document).ready(function ($) {
             }
 
             if (this.startDate && this.endDate) {
-                this.displayElement.textContent = 
+                this.displayElement.textContent =
                     `${this.formatDate(this.startDate)} - ${this.formatDate(this.endDate)}`;
             } else if (this.startDate) {
-                this.displayElement.textContent = 
+                this.displayElement.textContent =
                     `${this.formatDate(this.startDate)}`;
             } else {
                 //this.displayElement.textContent = 'Please select a date';
             }
 
-            if (this.selection === 'range' && this.endDate) {
-                const startStr = this.formatDate(this.startDate);
-                const endStr = this.formatDate(this.endDate);
-                display.text(`${this.settings.i18n.selectedRange || 'Selected Range:'} ${startStr} - ${endStr}`);
-            } else {
-                const dateStr = this.formatDate(this.startDate);
-                display.text(`${this.settings.i18n.selectedDate || 'Selected Date:'} ${dateStr}`);
-            }
+            // if (this.selection === 'range' && this.endDate) {
+            //     const startStr = this.formatDate(this.startDate);
+            //     const endStr = this.formatDate(this.endDate);
+            //     display.text(`${this.settings.i18n.selectedRange || 'Selected Range:'} ${startStr} - ${endStr}`);
+            // } else {
+            //     const dateStr = this.formatDate(this.startDate);
+            //     display.text(`${this.settings.i18n.selectedDate || 'Selected Date:'} ${dateStr}`);
+            // }
         }
 
         saveSelectedDates() {

@@ -160,7 +160,8 @@ class Persian_Calendar_Plugin
         );
     }
 
-    public function sanitize_checkbox($input) {
+    public function sanitize_checkbox($input)
+    {
         return isset($input) ? 1 : 0;
     }
 
@@ -281,7 +282,8 @@ class Persian_Calendar_Plugin
         <?php
     }
 
-    public function render_disable_past_dates_field() {
+    public function render_disable_past_dates_field()
+    {
         $value = get_option('persian_calendar_disable_past_dates', 0);
         ?>
         <label>
@@ -325,10 +327,15 @@ class Persian_Calendar_Plugin
                 'noSelection' => __('No dates selected.', 'persian-calendar'),
                 'prevMonth' => __('Previous month', 'persian-calendar'),
                 'nextMonth' => __('Next month', 'persian-calendar')
+            ),
+            'disablePastDates' => get_option('persian_calendar_disable_past_dates', 0),
+            'dateFormat' => array(
+                'jalali' => __('Y/m/d', 'persian-calendar'),
+                'gregorian' => __('m/d/Y', 'persian-calendar')
             )
         ));
 
-        
+
         wp_add_inline_style('persian-calendar', '
             .calendar[data-type="jalali"] {
                 direction: rtl;
@@ -337,11 +344,6 @@ class Persian_Calendar_Plugin
                 direction: ltr;
             }
         ');
-
-        wp_localize_script('persian-calendar', 'persianCalendarSettings', array(
-            // ... other settings ...
-            'disablePastDates' => get_option('persian_calendar_disable_past_dates', 0),
-        ));
     }
 
     public function calendar_shortcode($atts)
