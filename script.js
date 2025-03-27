@@ -11,6 +11,7 @@ jQuery(document).ready(function ($) {
             this.currentDate = new Date();
             this.settings = window.persianCalendarSettings || {};
             this.settings.disablePastDates = this.settings.disablePastDates === '1' || this.settings.disablePastDates === true;
+            this.displayElement = document.getElementById('selected-dates');
 
             this.applySettings();
             this.init();
@@ -163,6 +164,16 @@ jQuery(document).ready(function ($) {
             if (!this.startDate) {
                 display.text(this.settings.i18n.noSelection || 'No dates selected.');
                 return;
+            }
+
+            if (this.startDate && this.endDate) {
+                this.displayElement.textContent = 
+                    `${this.formatDate(this.startDate)} - ${this.formatDate(this.endDate)}`;
+            } else if (this.startDate) {
+                this.displayElement.textContent = 
+                    `${this.formatDate(this.startDate)}`;
+            } else {
+                //this.displayElement.textContent = 'Please select a date';
             }
 
             if (this.selection === 'range' && this.endDate) {
